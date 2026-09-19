@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Communication Coach</title>
+<meta name="description" content="Voice-first daily speaking practice. Everything runs on this phone.">
+<meta name="theme-color" content="#12131a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Coach">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<main class="wrap">
+
+  <!-- ==================================================== HOME =========== -->
+  <section id="screen-home" class="screen active">
+    <div id="home-banners"></div>
+
+    <div class="card">
+      <div class="row">
+        <div class="grow">
+          <div class="muted small">Streak</div>
+          <div class="streak-big" id="home-streak">0</div>
+          <div class="muted small" id="home-streak-sub">days in a row</div>
+        </div>
+        <div class="center">
+          <div class="muted small">This week</div>
+          <div class="streak-big" id="home-week-avg">–</div>
+          <div class="muted small">average</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Today's session</h2>
+      <p class="muted small" id="home-session-sub">Three voice tasks. About 15 minutes.</p>
+      <button class="primary full" id="btn-start-session">Start today's session</button>
+      <div class="row wrap-row" style="margin-top:.6rem">
+        <button class="sm ghost" data-task="task1">Just Task 1</button>
+        <button class="sm ghost" data-task="task2">Just Task 2</button>
+        <button class="sm ghost" data-task="task3">Just Task 3</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Current challenge</h2>
+      <select id="home-challenge"></select>
+      <p class="muted small" id="home-challenge-goal" style="margin-top:.5rem"></p>
+    </div>
+
+    <div class="card">
+      <h2>Phrase of the day</h2>
+      <p id="home-phrase-from" class="from" style="font-weight:600"></p>
+      <p class="muted" id="home-phrase-to"></p>
+    </div>
+
+    <div class="card tight">
+      <button class="ghost full" id="btn-quick-from-home">Quick Check a message</button>
+    </div>
+  </section>
+
+  <!-- ================================================= SESSION =========== -->
+  <section id="screen-session" class="screen">
+    <div class="steps" id="session-steps"></div>
+    <div id="session-body"></div>
+  </section>
+
+  <!-- ============================================== QUICK CHECK ========== -->
+  <section id="screen-quick" class="screen">
+    <h1>Quick Check</h1>
+    <p class="muted small">A fast rule-based review before you send something. Nothing leaves your phone.</p>
+
+    <div class="card">
+      <label for="quick-input">Your message</label>
+      <textarea id="quick-input" placeholder="Paste it, type it, or tap Dictate."></textarea>
+      <div class="row wrap-row" style="margin-top:.6rem">
+        <button class="sm" id="btn-quick-dictate">Dictate</button>
+        <button class="sm primary grow" id="btn-quick-run">Quick Check</button>
+        <button class="sm ghost" id="btn-quick-clear">Clear</button>
+      </div>
+    </div>
+
+    <div id="quick-result"></div>
+  </section>
+
+  <!-- ================================================ PROGRESS =========== -->
+  <section id="screen-progress" class="screen">
+    <h1>Progress</h1>
+    <div id="progress-body"></div>
+  </section>
+
+  <!-- ==================================================== MORE =========== -->
+  <section id="screen-more" class="screen">
+    <h1>More</h1>
+    <div class="card tight"><button class="ghost full" data-more="patterns">Pattern tracker</button></div>
+    <div class="card tight"><button class="ghost full" data-more="phrases">Phrase library</button></div>
+    <div class="card tight"><button class="ghost full" data-more="report">Weekly report</button></div>
+    <div class="card tight"><button class="ghost full" data-more="settings">Settings and phone check</button></div>
+  </section>
+
+  <!-- ================================================ PATTERNS =========== -->
+  <section id="screen-patterns" class="screen">
+    <h1>Pattern tracker</h1>
+    <p class="muted small">A green check means a pattern has not shown up for <span id="patterns-days">7</span> days.</p>
+    <div id="patterns-body"></div>
+  </section>
+
+  <!-- ================================================= PHRASES =========== -->
+  <section id="screen-phrases" class="screen">
+    <h1>Phrase library</h1>
+    <p class="muted small">Anything you add here is also added to the pattern detector, so the app starts catching it.</p>
+    <details class="card">
+      <summary>Add a phrase</summary>
+      <div class="stack" style="margin-top:.6rem">
+        <div>
+          <label for="phrase-from">What I say</label>
+          <input type="text" id="phrase-from" placeholder="new joiner">
+        </div>
+        <div>
+          <label for="phrase-to">Better version</label>
+          <input type="text" id="phrase-to" placeholder="new hire">
+        </div>
+        <div>
+          <label for="phrase-cat">Category</label>
+          <input type="text" id="phrase-cat" placeholder="Indian English to US English" list="phrase-cats">
+          <datalist id="phrase-cats"></datalist>
+        </div>
+        <button class="primary full" id="btn-add-phrase">Add phrase</button>
+      </div>
+    </details>
+    <div id="phrases-body"></div>
+  </section>
+
+  <!-- =================================================== REPORT ========== -->
+  <section id="screen-report" class="screen">
+    <h1>Weekly report</h1>
+    <p class="muted small">Copy this into your Claude chat. The question for Claude is already at the top.</p>
+
+    <div class="card">
+      <label for="notes-self">My notes on myself</label>
+      <textarea id="notes-self" placeholder="felt nervous on the client call, standup went well"></textarea>
+      <label for="notes-app" style="margin-top:.7rem">My notes on the app</label>
+      <textarea id="notes-app" placeholder="the question voice is too fast, want a timer"></textarea>
+      <p class="tiny muted" id="notes-saved" style="margin:.4rem 0 0">Saved automatically.</p>
+    </div>
+
+    <div class="row wrap-row" style="margin-bottom:.85rem">
+      <button class="primary grow" id="btn-report-copy">Copy report</button>
+      <button id="btn-report-share">Share</button>
+      <button class="ghost" id="btn-report-refresh">Refresh</button>
+    </div>
+
+    <div class="report-text" id="report-text"></div>
+
+    <div class="card" style="margin-top:.85rem">
+      <h2>Saved reports</h2>
+      <div id="report-history"></div>
+    </div>
+  </section>
+
+  <!-- ================================================= SETTINGS ========== -->
+  <section id="screen-settings" class="screen">
+    <h1>Settings</h1>
+
+    <div class="banner info">
+      <b>Scoring numbers live in a file, not here.</b>
+      Edit <span class="mono">js/settings.js</span> in your GitHub repo, commit, and the change is live in about 30 seconds. Targets, penalties, the filler list and the tips are all in that one file.
+    </div>
+
+    <div class="card">
+      <h2>Check my phone</h2>
+      <p class="muted small">Tests the two things most likely to go wrong: whether your phone keeps "um" and "uh" in transcripts, and whether it can record and transcribe at the same time. Takes about 15 seconds and needs you to speak.</p>
+      <button class="primary full" id="btn-device-check">Run the check</button>
+      <div id="device-result" style="margin-top:.75rem"></div>
+    </div>
+
+    <div class="card">
+      <h2>Scoring settings in use</h2>
+      <p class="muted small">Read live from <span class="mono">js/settings.js</span>. Edit that file on GitHub, reload this page, and check these numbers changed.</p>
+      <div id="settings-live"></div>
+    </div>
+
+    <div class="card">
+      <h2>What this phone supports</h2>
+      <div id="support-body"></div>
+    </div>
+
+    <div class="card">
+      <h2>My data</h2>
+      <p class="muted small">Everything is stored on this phone only. There is no server and no account. Recordings are deleted automatically after <span id="keep-days">14</span> days.</p>
+      <div class="row wrap-row">
+        <button class="sm" id="btn-export-data">Export backup</button>
+        <button class="sm" id="btn-import-data">Import backup</button>
+        <button class="sm danger" id="btn-clear-data">Delete everything</button>
+      </div>
+      <input type="file" id="import-file" accept="application/json" class="hidden">
+      <div id="storage-stats" class="muted tiny" style="margin-top:.6rem"></div>
+    </div>
+
+    <div class="card">
+      <h2>About</h2>
+      <p class="muted small">
+        Voice-first daily speaking practice, built from the v4 spec. Rule-based scoring only.
+        No AI API is called from this app, at any point. Speech is transcribed by your phone's
+        own browser engine, which does send the audio to Apple or Google to transcribe it; your
+        recordings, transcripts and scores stay on the device.
+      </p>
+      <p class="tiny muted" id="about-version"></p>
+    </div>
+  </section>
+
+</main>
+
+<nav>
+  <button data-screen="home" class="active"><span class="ic">🏠</span>Home</button>
+  <button data-screen="session"><span class="ic">🎙️</span>Practice</button>
+  <button data-screen="quick"><span class="ic">⚡</span>Quick</button>
+  <button data-screen="progress"><span class="ic">📈</span>Progress</button>
+  <button data-screen="more"><span class="ic">⋯</span>More</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
